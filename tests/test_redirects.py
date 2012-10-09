@@ -32,7 +32,7 @@ class TestRedirects(Base):
         Assert.equal(parsed_url.netloc, urlparse(url).netloc,'Failed on %s \nUsing %s' %(url, param))
         Assert.equal(parsed_url.query, urlencode(param),'Failed on %s \nUsing %s' %(url, param))
 
-    def test_that_checks_redirect_using_incorrect_query_values(self, lang, os):
+    def test_that_checks_redirect_using_locales_and_os(self, lang, os):
         url ='https://download.allizom.org/'
         param = {
             'product': 'firefox-16.0b6',
