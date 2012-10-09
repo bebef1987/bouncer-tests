@@ -32,3 +32,19 @@ class TestRedirects(Base):
         Assert.equal(parsed_url.scheme, 'https')
         Assert.equal(parsed_url.netloc, urlparse(url).netloc)
         Assert.equal(parsed_url.query, urlencode(param))
+
+    def test_stub_installer_redirect_for_en_us_and_win(self, mozwebqa):
+        url = mozwebqa.base_url
+        param = {
+            'product': 'firefox-16.0b6',
+            'lang': 'en-US',
+            'os': 'win'
+        }
+
+        response = self._head_request(url, params=param)
+
+        parsed_url = urlparse(response.url)
+
+        Assert.equal(response.status_code, requests.codes.ok, 'Failed on %s \nUsing %s' %(url, param))
+        Assert.equal(parsed_url.scheme, 'https', 'Failed on %s \nUsing %s' %(url, param))
+        Assert.equal(parsed_url.netloc, 'download-installer.cdn.mozilla.net','Failed on %s \nUsing %s' %(url, param))
