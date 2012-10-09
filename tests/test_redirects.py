@@ -16,7 +16,6 @@ from base import Base
 @pytest.mark.nondestructive
 class TestRedirects(Base):
 
-    @pytest.mark.parametrize('url', ["http://download.allizom.org/", "https://download.allizom.org/"])
     def test_that_checks_redirect_using_incorrect_query_values(self, url):
         param = {
             'product': 'firefox-16.0b6',
@@ -26,9 +25,24 @@ class TestRedirects(Base):
 
         response = self._head_request(url, params=param)
 
-        Assert.equal(response.status_code, requests.codes.not_found)
+        Assert.equal(response.status_code, requests.codes.not_found,'Failed on %s \nUsing %s' %(url, param))
 
         parsed_url = urlparse(response.url)
-        Assert.equal(parsed_url.scheme, 'https')
-        Assert.equal(parsed_url.netloc, urlparse(url).netloc)
-        Assert.equal(parsed_url.query, urlencode(param))
+        Assert.equal(parsed_url.scheme, 'https''Failed on %s \nUsing %s' %(url, param))
+        Assert.equal(parsed_url.netloc, urlparse(url).netloc,'Failed on %s \nUsing %s' %(url, param))
+        Assert.equal(parsed_url.query, urlencode(param),'Failed on %s \nUsing %s' %(url, param))
+
+    def test_that_checks_redirect_using_incorrect_query_values(self, lang, os):
+        url ='https://download.allizom.org/'
+        param = {
+            'product': 'firefox-16.0b6',
+            'lang': lang,
+            'os': os
+        }
+
+        response = self._head_request(url, params=param)
+
+        parsed_url = urlparse(response.url)
+
+        Assert.equal(response.status_code, requests.codes.ok, 'Failed on %s \nUsing %s' %(url, param))
+        Assert.equal(parsed_url.scheme, 'http', 'Failed on %s \nUsing %s' %(url, param))
